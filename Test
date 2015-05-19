@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Angualr JS Demo Application</title>
+    <script src="Scripts/jquery-1.9.1.min.js"></script>
+    <script src="Scripts/bootstrap.min.js"></script>
+    <script src="Scripts/angular.min.js"></script>
+    <script src="Scripts/dirPagination.js"></script>
+    <link href="Content/bootstrap.min.css" rel="stylesheet" />
+</head>
+<body ng-app="demoApp">
+    <div class="container-fluid">
+        <div ng-controller="HomeController">
+            <div class="row">
+                <div class="alert alert-info col-sm-3" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    {{selectField +" "+selectOption +" "+ inputTxt}}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-2">
+                    <select ng-model="selectField" class="form-control" ng-change="selectionChanged(item)">
+                        <option ng-repeat="field in fields">{{field}}</option>
+                    </select>
+                </div>
+                <div class="col-sm-2">
+                    <select ng-model="selectOption" class="form-control">
+                        <option>Equals</option>
+                        <option>Contains</option>
+                        <option>Starts With</option>
+                        <option>Ends With</option>
+                    </select>
+                </div>
+                <div class="col-sm-3">
+                    <input type="text" class="form-control" ng-model="inputTxt" />
+                </div>
+            </div>
+            <br />
+
+
+            <div class="table table-responsive table-striped">
+                <div class="row text-capitalize text-primary ">
+                    <div class="col-sm-1">
+                        {{fields[0]}}
+                    </div>
+                    <div class="col-sm-2">
+                        {{fields[1]}}
+                    </div>
+                    <div class="col-sm-2">
+                        {{fields[2]}}
+                    </div>
+                    <div class="col-sm-3">
+                        {{fields[3]}}
+                    </div>
+                    <div class="col-sm-1">
+                        {{fields[4]}}
+                    </div>
+                    <div class="col-sm-3">
+                        {{fields[5]}}
+                    </div>
+                </div>
+                <div class="row table-bordered" ng-repeat="student in students">
+                    <div class="col-sm-1">
+                        {{student.id}}
+                    </div>
+                    <div class="col-sm-2">
+                        {{student.first_name}}
+                    </div>
+                    <div class="col-sm-2">
+                        {{student.last_name}}
+                    </div>
+                    <div class="col-sm-3">
+                        {{student.email}}
+                    </div>
+                    <div class="col-sm-1">
+                        {{student.country}}
+                    </div>
+                    <div class="col-sm-3">
+                        {{student.ip_address}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        var demoModule = angular.module("demoApp", []);
+
+        demoModule.controller("HomeController", function ($scope, $http) {
+            $scope.helloTo = {};
+            $scope.helloTo.title = "Hello !";
+            $scope.currentPage = 1;
+            $scope.pageSize = 15;
+            var obj = "";
+            $http.get("sample.txt").success(
+                function (response) {
+                    $.each(response[0], function (j, vals) {
+                        obj += j + " ";
+                    })
+                    $scope.fields = obj.trim().split(" ");
+                    $scope.students = response;
+                });
+        });
+        
+    </script>
+</body>
+
+</html>
